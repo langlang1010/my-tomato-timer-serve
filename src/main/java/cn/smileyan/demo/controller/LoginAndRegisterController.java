@@ -30,6 +30,7 @@ public class LoginAndRegisterController {
     private Long TOKEN_TIMEOUT_MS;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
     @ApiOperation(value = "用户注册",notes = "需要提交用户名，密码和Email")
     @PostMapping("/register")
     private RestResult register(String username, String password, String email) throws UnsupportedEncodingException, NoSuchAlgorithmException {

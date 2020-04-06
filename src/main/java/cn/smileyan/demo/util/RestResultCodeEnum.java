@@ -45,7 +45,10 @@ public enum RestResultCodeEnum {
      * 邮箱格式错误
      */
     REGISTER_FAULT_EMAIL(415),
-
+    /**
+     * 授权码超时
+     */
+    TIMEOUT_TOKEN(415),
     /**
      * 请求资源未找到
      */
