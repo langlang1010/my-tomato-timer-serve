@@ -23,4 +23,8 @@ public interface TaskDao extends CrudRepository<Task,Long> {
     @Query(value = "SELECT task FROM Task task, UserTask userTask " +
             "WHERE userTask.userId = :userId AND userTask.taskId = task.id")
     List<Task> findTaskByUserid(@Param("userId") Long userId);
+
+    @Query(value = "SELECT COUNT(task.id) FROM Task task, UserTask userTask " +
+            "WHERE userTask.userId = :userId AND userTask.taskId = task.id AND task.finished = 1")
+    int countFinished(@Param("userId") Long userId);
 }

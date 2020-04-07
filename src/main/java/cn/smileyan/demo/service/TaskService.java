@@ -17,11 +17,11 @@ public interface TaskService {
 
     /**
      * 完成任务，首先需要检查一下用户和任务是否匹配
-     * @param task 任务
-     * @param user 用户
+     * @param taskId 任务
+     * @param userId 用户
      * @return 完成情况
      */
-    RestResult finish(Task task, User user);
+    RestResult finish(Long taskId, Long userId);
 
     /**
      * 根据用户查询
@@ -29,4 +29,11 @@ public interface TaskService {
      * @return 该用户的所有task
      */
     List<Task> findTaskByUserId(Long userId);
+
+    /**
+     * 根据用户查询已经完成的任务
+     * @param userId 用户id
+     * @return 数目
+     */
+    Integer countFinished(Long userId);
 }

@@ -22,8 +22,6 @@ import java.security.NoSuchAlgorithmException;
 @RestController
 @CrossOrigin
 public class LoginAndRegisterController {
-    final String LOGINED_COOKIE_NAME = "login";
-
     @Autowired
     private UserService userService;
     @Value("${TOKEN_TIMEOUT_MS}")
@@ -44,17 +42,7 @@ public class LoginAndRegisterController {
 
     @PostMapping("/login")
     @ApiOperation(value = "用户登录",notes = "用户登录，需要提交用户名与密码")
-    private RestResult login(String username, String password,
-                             HttpServletResponse response, HttpServletRequest request) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        RestResult restResult = userService.login(username, password);
-        // 查看 cookie 是否存在
-        Cookie[] cookies = request.getCookies();
-
-        // 登录并写入cookie
-        if (restResult.getData() != null) {
-            Cookie cookie = new Cookie(LOGINED_COOKIE_NAME, restResult.getData() + "");
-            response.addCookie(cookie);
-        }
-        return restResult;
+    private RestResult login(String username, String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        return  userService.login(username, password);
     }
 }

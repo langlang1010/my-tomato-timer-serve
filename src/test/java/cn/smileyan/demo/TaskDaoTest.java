@@ -49,4 +49,10 @@ public class TaskDaoTest {
         List<Task> taskByUserid = taskDao.findTaskByUserid(4L);
         System.out.println("size = "+taskByUserid.size());
     }
+
+    @Test
+    public void count() {
+        int count = taskDao.countFinished(4L);
+        System.out.println(count);
+    }
 }

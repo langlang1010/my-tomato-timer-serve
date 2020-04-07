@@ -15,12 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * @author Smileyan
+ */
 @Service
 public class TaskServiceImpl implements TaskService {
     @Autowired
     private UserTaskDao userTaskDao;
     @Autowired
     private TaskDao taskDao;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Task save(Task task, User user) {
@@ -37,10 +41,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public RestResult finish(Task task, User user) {
+    public RestResult finish(Long taskId, Long userId) {
         RestResult restResult = new RestResult();
         // 1. 检查task是否存在
-        Long taskId = task.getId();
         Task taskById = taskDao.getById(taskId);
         if(taskById == null) {
             restResult.setMsg("此任务不存在");
@@ -49,7 +52,7 @@ public class TaskServiceImpl implements TaskService {
         }
 
         // 2. 检查user和task是否匹配
-        List<UserTask> matched = userTaskDao.findByUserIdAndAndTaskId(user.getId(), task.getId());
+        List<UserTask> matched = userTaskDao.findByUserIdAndAndTaskId(userId, taskId);
         if (matched != null && matched.size() == 0) {
             restResult.setMsg("该任务不属于此用户");
             restResult.setData(RestResultCodeEnum.NONE_RESULT);
@@ -70,5 +73,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> findTaskByUserId(Long userId) {
         return taskDao.findTaskByUserid(userId);
+    }
+
+    @Override
+    public Integer countFinished(Long userId) {
+        return taskDao.countFinished(userId);
     }
 }

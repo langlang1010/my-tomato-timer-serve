@@ -21,4 +21,5 @@ public interface UserService {
      * @return 登录用户
      */
     RestResult login(String username, String password) throws UnsupportedEncodingException, NoSuchAlgorithmException;
+
 }

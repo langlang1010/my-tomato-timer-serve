@@ -3,6 +3,7 @@ package cn.smileyan.demo;
 import cn.smileyan.demo.dao.TaskDao;
 import cn.smileyan.demo.entity.Task;
 import cn.smileyan.demo.service.TaskService;
+import cn.smileyan.demo.util.RestResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,11 @@ public class TaskServiceTest {
         taskByUserid.forEach(e->{
             System.out.println(e.getId());
         });
+    }
+
+    @Test
+    public void finishTask() {
+        RestResult finish = taskService.finish(7L, 3L);
+        System.out.println(finish.getMsg());
     }
 }
