@@ -10,10 +10,10 @@ public interface TaskService {
     /**
      * 添加任务
      * @param task 任务
-     * @param user 用户
+     * @param userId 用户
      * @return 任务
      */
-    Task save(Task task, User user);
+    Task save(Task task, Long userId);
 
     /**
      * 完成任务，首先需要检查一下用户和任务是否匹配
@@ -23,6 +23,13 @@ public interface TaskService {
      */
     RestResult finish(Long taskId, Long userId);
 
+    /**
+     * 重新开始某项任务
+     * @param taskId 任务
+     * @param userId 用户
+     * @return 取消完成的任务
+     */
+    RestResult restart(Long taskId, Long userId);
     /**
      * 根据用户查询
      * @param userId 用户
@@ -36,4 +43,5 @@ public interface TaskService {
      * @return 数目
      */
     Integer countFinished(Long userId);
+
 }

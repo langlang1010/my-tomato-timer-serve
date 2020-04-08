@@ -27,7 +27,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Task save(Task task, User user) {
+    public Task save(Task task, Long userId) {
         // 1. 添加 task
         Task save = taskDao.save(task);
 
@@ -35,13 +35,17 @@ public class TaskServiceImpl implements TaskService {
         UserTask userTask = new UserTask();
         userTask.setId(0L);
         userTask.setTaskId(save.getId());
-        userTask.setUserId(user.getId());
+        userTask.setUserId(userId);
         userTaskDao.save(userTask);
-        return task;
+        return save;
     }
 
     @Override
     public RestResult finish(Long taskId, Long userId) {
+        return modifyTask(taskId, userId, true);
+    }
+
+    private RestResult modifyTask(Long taskId, Long userId, boolean finish) {
         RestResult restResult = new RestResult();
         // 1. 检查task是否存在
         Task taskById = taskDao.getById(taskId);
@@ -60,7 +64,7 @@ public class TaskServiceImpl implements TaskService {
         }
 
         // 3. 修改task的is_finished和finish time
-        taskById.setFinished(true);
+        taskById.setFinished(finish);
         taskById.setFinishTime(Calendar.getInstance().getTime());
 
         // 4. 更新
@@ -68,6 +72,11 @@ public class TaskServiceImpl implements TaskService {
         restResult.setMsg("完成任务");
         restResult.setData(updated);
         return restResult;
+    }
+
+    @Override
+    public RestResult restart(Long taskId, Long userId) {
+        return modifyTask(taskId, userId, false);
     }
 
     @Override
@@ -79,4 +88,6 @@ public class TaskServiceImpl implements TaskService {
     public Integer countFinished(Long userId) {
         return taskDao.countFinished(userId);
     }
+
+
 }

@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
 import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserTaskController {
     @Autowired
     private TaskService taskService;
@@ -68,6 +70,39 @@ public class UserTaskController {
         Integer count = taskService.countFinished(userId);
         restResult.setData(count);
         return restResult;
+    }
+
+    @ApiOperation(value = "添加某个任务",notes = "需要提交token和taskName")
+    @PostMapping("/add")
+    private RestResult saveTask(String taskName, String token) {
+        RestResult restResult = new RestResult();
+        Long userId = checkToken(token);
+        if (userId == null) {
+            restResult.setMsg("授权码已经超时，请重新登录");
+            restResult.setCode(RestResultCodeEnum.TIMEOUT_TOKEN.getSeq());
+            return restResult;
+        }
+        Task task = new Task();
+        task.setId(0L);
+        task.setStartTime(Calendar.getInstance().getTime());
+        task.setTaskName(taskName);
+        task.setFinished(false);
+        Task save = taskService.save(task, userId);
+        restResult.setData(save);
+        return restResult;
+    }
+
+    @ApiOperation(value = "重新开始某个任务",notes = "需要提交token和taskId")
+    @PostMapping("/restart")
+    private RestResult unfinishTask(String token, Long taskId) {
+        RestResult restResult = new RestResult();
+        Long userId = checkToken(token);
+        if (userId == null) {
+            restResult.setMsg("授权码已经超时，请重新登录");
+            restResult.setCode(RestResultCodeEnum.TIMEOUT_TOKEN.getSeq());
+            return restResult;
+        }
+        return taskService.restart(taskId, userId);
     }
 
     /**
