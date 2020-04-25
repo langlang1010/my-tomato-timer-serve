@@ -34,7 +34,7 @@ public class Swagger2 {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder().title("springboot使用swagger例子")
                 .description("简单优雅的restful风格")
-                .termsOfServiceUrl("https://smileyan.cn")
+                .termsOfServiceUrl("https://x.withyan.cn")
                 .version("1.0")
                 .build();
     }
